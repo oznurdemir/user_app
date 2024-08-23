@@ -36,7 +36,7 @@ class _DetaySayfaState extends State<DetaySayfa> {
             ],
           ),
         )
-    ),,
+    ),
     );
   }
 }
