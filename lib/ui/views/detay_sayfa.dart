@@ -10,8 +10,6 @@ class DetaySayfa extends StatefulWidget {
   State<DetaySayfa> createState() => _DetaySayfaState();
 }
 
-
-
 class _DetaySayfaState extends State<DetaySayfa> {
   // text fieldlar için controller oluştur.
   var tfKisiAdController = TextEditingController();
@@ -22,7 +20,13 @@ class _DetaySayfaState extends State<DetaySayfa> {
     print("Kişi Güncelle: $kisi_id - $kisi_ad - $kisi_tel");
   }
 
-
+  @override
+  void initState() {
+    super.initState();
+    var kisi = widget.kisi;
+    tfKisiAdController.text = kisi.kisi_ad;
+    tfKisiTelController.text = kisi.kisi_tel;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +40,8 @@ class _DetaySayfaState extends State<DetaySayfa> {
               TextField(controller: tfKisiAdController, decoration: const InputDecoration(hintText: "Kişi Ad"),),
               TextField(controller: tfKisiTelController, decoration: const InputDecoration(hintText: "Kişi Tel"),),
               ElevatedButton(onPressed: (){
-                // veri kaydetme işlemi
+                // veri güncelleme işlemi
+                kisiGuncelle(widget.kisi.kisi_id, tfKisiAdController.text, tfKisiTelController.text);
               }, child: const Text("KAYDET")),
             ],
           ),
