@@ -10,15 +10,20 @@ class DetaySayfa extends StatefulWidget {
   State<DetaySayfa> createState() => _DetaySayfaState();
 }
 
-//kişi güncelleme işleminin modüler olması için ayrı bir fonksiyonda bu işlemi yapıyoruz.
-Future<void> kisiGuncelle(int kisi_id, String kisi_ad, String kisi_tel) async{
-  print("Kişi Güncelle: $kisi_id - $kisi_ad - $kisi_tel");
-}
+
 
 class _DetaySayfaState extends State<DetaySayfa> {
   // text fieldlar için controller oluştur.
   var tfKisiAdController = TextEditingController();
   var tfKisiTelController = TextEditingController();
+
+  //kişi güncelleme işleminin modüler olması için ayrı bir fonksiyonda bu işlemi yapıyoruz.
+  Future<void> kisiGuncelle(int kisi_id, String kisi_ad, String kisi_tel) async{
+    print("Kişi Güncelle: $kisi_id - $kisi_ad - $kisi_tel");
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
