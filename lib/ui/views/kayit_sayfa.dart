@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:user_app/ui/cubit/kayit_sayfa_cubit.dart';
 
 class KayitSayfa extends StatefulWidget {
   const KayitSayfa({super.key});
@@ -6,12 +8,6 @@ class KayitSayfa extends StatefulWidget {
   @override
   State<KayitSayfa> createState() => _KayitSayfaState();
 }
-
-//kişi kayıt işleminin modüler olması için ayrı bir fonksiyonda bu işlemi yapıyoruz.
-Future<void> kisiKaydet(String kisi_ad, String kisi_tel) async{
-  print("Kişi kayıt: $kisi_ad - $kisi_tel");
-}
-
 class _KayitSayfaState extends State<KayitSayfa> {
   // text fieldlar için controller oluştur.
   var tfKisiAdController = TextEditingController();
@@ -30,7 +26,7 @@ class _KayitSayfaState extends State<KayitSayfa> {
               TextField(controller: tfKisiTelController, decoration: const InputDecoration(hintText: "Kişi Tel"),),
               ElevatedButton(onPressed: (){
                 // veri kaydetme işlemi
-                kisiKaydet(tfKisiAdController.text, tfKisiTelController.text);
+                context.read<KayitSayfaCubit>().kisiKaydet(tfKisiAdController.text, tfKisiTelController.text);
               }, child: const Text("KAYDET")),
             ],
           ),

@@ -1,7 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:user_app/data/entity/kisiler.dart';
+import 'package:user_app/ui/cubit/anasayfa_cubit.dart';
 import 'package:user_app/ui/views/detay_sayfa.dart';
 import 'package:user_app/ui/views/kayit_sayfa.dart';
 
@@ -15,21 +17,11 @@ class Anasayfa extends StatefulWidget {
 class _AnasayfaState extends State<Anasayfa> {
   bool aramaYapiliyorMu = false;
 
-  Future<void> ara(String aramaKelimesi) async{
-    print("Arama Kelimesi: $aramaKelimesi");
-  }
-  Future<List<Kisiler>> tumKisiler() async {
-    var kisilerListesi = <Kisiler>[];
-    var k1 = Kisiler(kisi_id: 1, kisi_ad: "Ahmet", kisi_tel: "1111");
-    var k2 = Kisiler(kisi_id: 2, kisi_ad: "Zeynep", kisi_tel: "2222");
-    var k3 = Kisiler(kisi_id: 3, kisi_ad: "Beyza", kisi_tel: "3333");
-    kisilerListesi.add(k1);
-    kisilerListesi.add(k2);
-    kisilerListesi.add(k3);
-    return kisilerListesi;
-  }
-  Future<void> kisiSil(int kisi_id) async{
-    print("Kişi Silindi: ${kisi_id}");
+  //sayfa yüklendiği anda ekranda çalışan fonksiyon
+  @override
+  void initState() {
+    super.initState();
+    context.read<AnasayfaCubit>().tumKisiler();
   }
   @override
   Widget build(BuildContext context) {
@@ -37,7 +29,7 @@ class _AnasayfaState extends State<Anasayfa> {
       appBar: AppBar(
         title: aramaYapiliyorMu ?
          TextField(decoration: const InputDecoration(hintText: "Ara"), onChanged: (aramaSonucu){
-          ara(aramaSonucu);
+           context.read<AnasayfaCubit>().ara(aramaSonucu);
         },)
             : const Text("Kişiler"),
         actions: [aramaYapiliyorMu ?
@@ -46,6 +38,7 @@ class _AnasayfaState extends State<Anasayfa> {
               // arama işlemi
               aramaYapiliyorMu = false;
             });
+            context.read<AnasayfaCubit>().tumKisiler(); //arama işlemi bittikten sonra ekranda tekrardan tüm kişiler görünsün
           }, icon: const Icon(Icons.clear)) :
           IconButton(onPressed: (){
             setState(() {
@@ -54,15 +47,12 @@ class _AnasayfaState extends State<Anasayfa> {
           }, icon: const Icon(Icons.search)),
         ],
       ),
-      // Performanslı bir şekilde verileri arayüzde göstermek için futureBuilder kullanıyoruz.
-      body: FutureBuilder<List<Kisiler>>(
-        future: tumKisiler(),
-        builder: (context, snapshot){
-          if(snapshot.hasData){
-            // Data varsa listeleme işlemi yapacağız.
-            var kisilerListesi = snapshot.data;
+      // Cubitteki fonksiyondan dönen listeyi dinlemek için bloc builder kullanıyoruz.
+      body: BlocBuilder<AnasayfaCubit, List<Kisiler>>(
+        builder: (context, kisilerListesi){
+          if(kisilerListesi.isNotEmpty){ //içinde veri varsa çalışsın
             return ListView.builder(
-              itemCount: kisilerListesi!.length, //listedeki item sayısı
+              itemCount: kisilerListesi.length, //listedeki item sayısı
               itemBuilder: (context, index){ // itemBuilder item sayısı kadar çalışacak(burada 3 kere)
                 var kisi = kisilerListesi[index]; // listedeki her bir veriyi tek tek alıyoruz.
                 return Padding(
@@ -93,7 +83,7 @@ class _AnasayfaState extends State<Anasayfa> {
                                 SnackBar(
                                   content: const Text("Kişiyi Silmek İstiyor musunuz?"),
                                   action: SnackBarAction(label: "Evet", onPressed: (){
-                                    kisiSil(kisi.kisi_id);
+                                    context.read<AnasayfaCubit>().kisiSil(kisi.kisi_id);
                                 }),
                               )
                             );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:user_app/data/entity/kisiler.dart';
+import 'package:user_app/ui/cubit/detay_sayfa_cubit.dart';
 
 class DetaySayfa extends StatefulWidget {
   // Bu sayfaya geldiğimizde bir Kisiler nesnesi yollamamız gerekiyor.
@@ -15,10 +17,6 @@ class _DetaySayfaState extends State<DetaySayfa> {
   var tfKisiAdController = TextEditingController();
   var tfKisiTelController = TextEditingController();
 
-  //kişi güncelleme işleminin modüler olması için ayrı bir fonksiyonda bu işlemi yapıyoruz.
-  Future<void> kisiGuncelle(int kisi_id, String kisi_ad, String kisi_tel) async{
-    print("Kişi Güncelle: $kisi_id - $kisi_ad - $kisi_tel");
-  }
 
   @override
   void initState() {
@@ -41,7 +39,7 @@ class _DetaySayfaState extends State<DetaySayfa> {
               TextField(controller: tfKisiTelController, decoration: const InputDecoration(hintText: "Kişi Tel"),),
               ElevatedButton(onPressed: (){
                 // veri güncelleme işlemi
-                kisiGuncelle(widget.kisi.kisi_id, tfKisiAdController.text, tfKisiTelController.text);
+                context.read<DetaySayfaCubit>().kisiGuncelle(widget.kisi.kisi_id, tfKisiAdController.text, tfKisiTelController.text);
               }, child: const Text("KAYDET")),
             ],
           ),
