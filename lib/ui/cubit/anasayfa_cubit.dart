@@ -19,7 +19,7 @@ class AnasayfaCubit extends Cubit<List<Kisiler>>{
     emit(kisilerListesi);
   }
 
-  Future<void> kisiSil(int kisi_id) async{
+  Future<void> kisiSil(String kisi_id) async{
     await krepo.kisiSil(kisi_id);
     await tumKisiler();
   }

@@ -1,5 +1,6 @@
+
 class Kisiler{
-  int kisi_id;
+  String kisi_id;
   String kisi_ad;
   String kisi_tel;
 
