@@ -61,7 +61,7 @@ class _AnasayfaState extends State<Anasayfa> {
                     onTap: (){
                       // card a basınca detay sayfasına gitsin
                       Navigator.push(context, MaterialPageRoute(builder: (context) => DetaySayfa(kisi: kisi))).then((value){
-                        print("Anasayfaya dönüldü.");
+                        context.read<AnasayfaCubit>().tumKisiler();
                       });
                     },
                     child: Card(
@@ -83,7 +83,8 @@ class _AnasayfaState extends State<Anasayfa> {
                                 SnackBar(
                                   content: const Text("Kişiyi Silmek İstiyor musunuz?"),
                                   action: SnackBarAction(label: "Evet", onPressed: (){
-                                    context.read<AnasayfaCubit>().kisiSil(kisi.kisi_id);
+                                    context.read<AnasayfaCubit>().kisiSil(kisi.kisi_id
+                                    );
                                 }),
                               )
                             );
@@ -105,6 +106,7 @@ class _AnasayfaState extends State<Anasayfa> {
           //buttona basınca sayfa geçişi yapılacak.
           Navigator.push(context, MaterialPageRoute(builder: (context) => const KayitSayfa())).then((value){
             //Geçişten sonra sayfaya geri dönüşte bilgi sahibi olmak için
+            context.read<AnasayfaCubit>().tumKisiler();
             print("Anasayfaya dönüldü.");
           });
         },
